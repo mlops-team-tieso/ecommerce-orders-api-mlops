@@ -1,7 +1,7 @@
 import boto3
 
 # connect to DynamoDB
-dynamodb = boto3.resource("dynamodb", region_name="us-east-1")
+dynamodb = boto3.resource("dynamodb", region_name="us-east-2")
 
 table = dynamodb.Table("products")
 
