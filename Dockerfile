@@ -1,3 +1,4 @@
+# Orders API - Lambda image for ecommerce-orders-api-mlops
 FROM public.ecr.aws/lambda/python:3.11
 
 COPY requirements.txt .
