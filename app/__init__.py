@@ -1,0 +1,2 @@
+"""Orders service application package."""
+
