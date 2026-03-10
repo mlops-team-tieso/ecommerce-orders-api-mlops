@@ -3,6 +3,7 @@ import time
 
 import boto3
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
 
 from app.api.orders import router as orders_router
@@ -46,6 +47,16 @@ def create_app() -> FastAPI:
         }
 
     app.include_router(orders_router, prefix="/orders", tags=["orders"])
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[
+            "http://team2-ecommerce-frontend.s3-website-us-east-1.amazonaws.com",
+        ],
+        allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allow_headers=["Content-Type"],
+    )
+
     return app
 
 
