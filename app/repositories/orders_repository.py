@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from decimal import Decimal
 from typing import List, Optional
 
 import boto3
@@ -65,15 +66,15 @@ class OrdersRepository:
             "order_id": order.order_id,
             "user_id": order.user_id,
             "status": order.status.value,
-            "total_price": order.total_price,
+            "total_price": Decimal(str(order.total_price)),
             "created_at": order.created_at.isoformat(),
             "items": [
                 {
                     "product_id": item.product_id,
                     "name": item.name,
-                    "price": item.price,
+                    "price": Decimal(str(item.price)),
                     "quantity": item.quantity,
-                    "subtotal": item.subtotal,
+                    "subtotal": Decimal(str(item.subtotal)),
                 }
                 for item in order.items
             ],
