@@ -15,7 +15,7 @@ class OrderStatus(str, Enum):
 
 @dataclass
 class OrderItem:
-    product_id: int
+    product_id: str
     name: str
     price: float
     quantity: int
@@ -30,4 +30,3 @@ class Order:
     total_price: float
     items: List[OrderItem] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.utcnow)
-

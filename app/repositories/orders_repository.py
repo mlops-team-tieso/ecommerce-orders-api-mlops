@@ -22,7 +22,9 @@ class OrdersRepository:
 
     def __init__(self, dynamodb_resource=None) -> None:
         if dynamodb_resource is None:
-            dynamodb_resource = boto3.resource("dynamodb", region_name=_get_region_name())
+            dynamodb_resource = boto3.resource(
+                "dynamodb", region_name=_get_region_name()
+            )
         self._table = dynamodb_resource.Table(_get_table_name())
 
     def create_order(self, order: Order) -> None:
@@ -42,7 +44,9 @@ class OrdersRepository:
         items = response.get("Items", [])
         return [self._item_to_order(it) for it in items]
 
-    def update_order_status(self, order_id: str, new_status: OrderStatus) -> Optional[Order]:
+    def update_order_status(
+        self, order_id: str, new_status: OrderStatus
+    ) -> Optional[Order]:
         response = self._table.update_item(
             Key={"order_id": order_id},
             UpdateExpression="SET #s = :s",
@@ -79,7 +83,7 @@ class OrdersRepository:
     def _item_to_order(item: dict) -> Order:
         items = [
             OrderItem(
-                product_id=int(it["product_id"]),
+                product_id=str(it["product_id"]),
                 name=it["name"],
                 price=float(it["price"]),
                 quantity=int(it["quantity"]),
@@ -104,4 +108,3 @@ class OrdersRepository:
             items=items,
             created_at=created_at,
         )
-
