@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field, validator
 
 
 class CreateOrderItemRequest(BaseModel):
-    product_id: str = Field(..., min_length=1)
+    product_id: int = Field(..., gt=0)
     quantity: int = Field(..., gt=0)
 
 
@@ -16,16 +16,14 @@ class CreateOrderRequest(BaseModel):
     items: List[CreateOrderItemRequest]
 
     @validator("items")
-    def validate_items(
-        cls, value: List[CreateOrderItemRequest]
-    ) -> List[CreateOrderItemRequest]:
+    def validate_items(cls, value: List[CreateOrderItemRequest]) -> List[CreateOrderItemRequest]:
         if not value:
             raise ValueError("Order must contain at least one item")
         return value
 
 
 class OrderItemSchema(BaseModel):
-    product_id: str
+    product_id: int
     name: str
     price: float
     quantity: int
@@ -46,3 +44,4 @@ class OrderResponse(BaseModel):
 
 class UpdateOrderStatusRequest(BaseModel):
     status: str
+
