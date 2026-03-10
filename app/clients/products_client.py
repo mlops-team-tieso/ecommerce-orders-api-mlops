@@ -43,7 +43,7 @@ class ProductsClient:
         response.raise_for_status()
         data = response.json()
         return Product(
-            product_id=str(data["product_id"]),
+            product_id=str(data.get("product_id") or data.get("id") or product_id),
             name=data["name"],
             price=float(data["price"]),
             stock=int(data["stock"]),
