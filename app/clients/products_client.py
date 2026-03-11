@@ -37,10 +37,18 @@ class ProductsClient:
 
     def get_product(self, product_id: str) -> Product:
         url = f"{_get_products_base_url()}/products/{product_id}"
-        response = self._client.get(url)
+        try:
+            response = self._client.get(url)
+        except httpx.HTTPError as exc:
+            raise ProductsClientError(
+                f"Failed to connect to Products service: {exc}"
+            ) from exc
         if response.status_code == 404:
             raise ProductsClientError("Product not found")
-        response.raise_for_status()
+        if response.status_code >= 400:
+            raise ProductsClientError(
+                f"Products service returned {response.status_code} for product {product_id}"
+            )
         data = response.json()
         return Product(
             product_id=str(data.get("product_id") or data.get("id") or product_id),
